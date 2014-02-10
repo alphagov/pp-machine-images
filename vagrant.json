@@ -1,0 +1,50 @@
+{
+  "variables": {
+    "username": "vagrant",
+    "password": "vagrant",
+    "hostname": "ubuntu-base",
+    "vm_name": "ubuntu-packer-HEAD"
+  },
+  "builders": [
+    {
+      "type": "virtualbox-iso",
+      "boot_command": [
+        "<esc><esc><enter><wait>",
+        "/install/vmlinuz noapic ",
+        "preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/preseed.cfg ",
+        "debian-installer=en_GB auto locale=en_GB kbd-chooser/method=gb ",
+        "hostname={{ user `hostname` }} ",
+        "fb=false debconf/frontend=noninteractive ",
+        "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=GB ",
+        "keyboard-configuration/variant=GB console-setup/ask_detect=false ",
+        "initrd=/install/initrd.gz -- <enter>"],
+      "disk_size": 40960,
+      "guest_os_type": "Ubuntu_64",
+      "http_directory": "preseed",
+      "iso_checksum": "e83adb9af4ec0a039e6a5c6e145a34de",
+      "iso_checksum_type": "md5",
+      "iso_url": "http://releases.ubuntu.com/precise/ubuntu-12.04.4-server-amd64.iso",
+      "ssh_username": "{{ user `username` }}",
+      "ssh_password": "{{ user `password` }}",
+      "shutdown_command": "echo '{{ user `username` }}' | sudo -S shutdown -P now",
+      "vm_name": "{{ user `vm_name` }}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "execute_command": "echo '{{ user `password` }}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
+      "scripts": [
+	"scripts/setup-vagrant-user.sh",
+        "scripts/install-guest-additions.sh"
+      ],
+      "only": ["virtualbox-iso"]
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true
+    }
+  ]
+}

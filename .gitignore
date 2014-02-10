@@ -1,0 +1,4 @@
+/output-*
+/packer_cache
+/sources
+*.box
