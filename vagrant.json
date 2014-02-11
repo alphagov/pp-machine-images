@@ -36,9 +36,9 @@
       "execute_command": "echo '{{ user `password` }}' | {{ .Vars }} sudo -E -S sh '{{ .Path }}'",
       "scripts": [
 	"scripts/setup-vagrant-user.sh",
-        "scripts/install-guest-additions.sh"
-      ],
-      "only": ["virtualbox-iso"]
+        "scripts/install-guest-additions.sh",
+        "scripts/install-nfs.sh"
+      ]
     }
   ],
   "post-processors": [
