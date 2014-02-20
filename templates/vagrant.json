@@ -3,10 +3,12 @@
     "username": "vagrant",
     "password": "vagrant",
     "hostname": "ubuntu-base",
-    "vm_name": "ubuntu-packer-HEAD"
+    "vm_name": "ubuntu-packer-HEAD",
+    "build_name": "vagrant"
   },
   "builders": [
     {
+      "name": "{{ user `build_name` }}",
       "type": "virtualbox-iso",
       "boot_command": [
         "<esc><esc><enter><wait>",
